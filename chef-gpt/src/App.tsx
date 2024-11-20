@@ -5,17 +5,20 @@ import ChefPage from "./pages/chefpage";
 import Discover from "./pages/discover";
 import Generate from "./pages/generate";
 import Favourite from "./pages/favourite";
+import { ThemeProvider } from "./context/themecontext";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/nomgpt/discover" element={<Discover />} />
-      <Route path="/nomgpt/generate" element={<Generate />} />
-      <Route path="/nomgpt/favourite" element={<Favourite />} />
-      <Route path="/nomgpt" element={<ChefPage />} />
-      <Route path="/" element={<ChefPage />} />
-    </Routes>
+    <ThemeProvider>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/nomgpt/discover" element={<Discover />} />
+        <Route path="/nomgpt/generate" element={<Generate />} />
+        <Route path="/nomgpt/favourite" element={<Favourite />} />
+        <Route path="/nomgpt" element={<ChefPage />} />
+        <Route path="/" element={<ChefPage />} />
+      </Routes>
+    </ThemeProvider>
   );
 }
 

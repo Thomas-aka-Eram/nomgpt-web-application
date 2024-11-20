@@ -1,32 +1,20 @@
 import React from "react";
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/navigation.css";
+import { useTheme } from "../context/themecontext"; // Import the custom hook
 
 interface User {
   name: string;
 }
 
 function Navigation() {
-  const [user, setUser] = useState<User>({ name: "Thomas Eram" });
+  const [user, setUser] = React.useState<User>({ name: "Thomas Eram" });
+  const { theme, toggleTheme } = useTheme(); // Access theme context
 
   React.useEffect(() => {
-    // Simulate fetching user data
+    // Simulate fetching user data if needed
     // setUser({ name: "Test User" });
   }, []);
-
-  //toggle light or dark
-  const [theme, setTheme] = useState("light");
-
-  // Apply the theme to the document root
-  useEffect(() => {
-    document.documentElement.setAttribute("color-theme", theme);
-  }, [theme]);
-
-  // Toggle between light and dark modes
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  };
 
   return (
     <>
@@ -35,7 +23,7 @@ function Navigation() {
           <div className="ChefGPT">
             <div className="chef-logo">
               <Link to={"../nomgpt"}>
-                <img src="../../public/logohat.png" />
+                <img src="../../public/logohat.png" alt="ChefGPT Logo" />
               </Link>
             </div>
             <h1>
@@ -71,9 +59,9 @@ function Navigation() {
           <div className="theme">
             <span
               className={`material-symbols-outlined ${theme}`}
-              onClick={toggleTheme}
+              onClick={toggleTheme} // Use toggleTheme from context
             >
-              wb_sunny
+              {theme === "light" ? "wb_sunny" : "wb_sunny"}
             </span>
           </div>
           <div className="profile">

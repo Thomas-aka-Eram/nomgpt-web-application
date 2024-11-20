@@ -10,6 +10,6 @@ router.get("/", (req, res) => {
 router.post("/recipes", fetchRecipes);
 
 // POST endpoint for fetching random recipes
-router.post("/random", fetchrandomRecipes);
+router.get("/random", fetchrandomRecipes);
 
 module.exports = router;

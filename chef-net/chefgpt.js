@@ -14,7 +14,7 @@ app.use(cors({
 
 app.use("/api/", GeneralRoute);
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 const uri = process.env.DB_KEY;
 
 mongoose
