@@ -1,4 +1,4 @@
-.generate-container {
+.favourite-container {
   width: 100%;
   height: auto;
   background-color: var(--bg-mode);
@@ -9,7 +9,7 @@
   align-items: center;
 }
 
-.generate {
+.favourite {
   width: 100%;
   height: 90vh;
 }

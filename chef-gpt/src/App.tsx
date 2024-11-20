@@ -4,6 +4,7 @@ import Login from "./pages/loginpage";
 import ChefPage from "./pages/chefpage";
 import Discover from "./pages/discover";
 import Generate from "./pages/generate";
+import Favourite from "./pages/favourite";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/nomgpt/discover" element={<Discover />} />
       <Route path="/nomgpt/generate" element={<Generate />} />
+      <Route path="/nomgpt/favourite" element={<Favourite />} />
       <Route path="/nomgpt" element={<ChefPage />} />
       <Route path="/" element={<ChefPage />} />
     </Routes>
