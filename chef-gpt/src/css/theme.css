@@ -1,0 +1,53 @@
+/* Importing google font */
+@import url("https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&display=swap");
+/* Removing global margin */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Color Scheme */
+:root {
+  color-scheme: light dark;
+  --main-font-family: "Markazi Text", serif;
+  --main-color: rgb(16, 185, 129);
+  --main-color-hover: rgb(13, 156, 109);
+  --feature-color: rgb(236, 61, 61);
+  --border-color: grey;
+
+  --text-color: #282828;
+  --bg-mode: #f0f0f0;
+}
+
+[color-theme="dark"] {
+  --text-color: #f0f0f0;
+  --bg-mode: #121212;
+}
+
+/* giving body some padding  */
+body {
+  color: var(--text-color);
+  font-family: var(--main-font-family);
+  font-size: 1.2em;
+  font-weight: lighter;
+}
+
+.no-link-logo {
+  text-decoration: none;
+  color: var(--main-color);
+}
+.no-link-logo {
+  color: var(--main-color);
+}
+
+.no-link-style {
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: lighter;
+  color: var(--text-color);
+}
+
+.no-link-style:visited {
+  color: var(--text-color);
+}
