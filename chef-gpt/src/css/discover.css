@@ -4,16 +4,23 @@
   background-color: var(--bg-mode);
 
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
 .discover {
   width: 100%;
   height: 90vh;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 16px; /* Space between posts */
+  padding: 16px;
+  .discover-loading {
+    height: 90vh;
+  }
+}
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.discover::-webkit-scrollbar {
+  display: none;
 }

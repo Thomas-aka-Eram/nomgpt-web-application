@@ -37,9 +37,6 @@ body {
   text-decoration: none;
   color: var(--main-color);
 }
-.no-link-logo {
-  color: var(--main-color);
-}
 
 .no-link-style {
   text-decoration: none;

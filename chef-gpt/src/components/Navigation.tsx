@@ -21,7 +21,7 @@ function Navigation() {
       <div className="topNavi">
         <div className="chef-menu">
           <div className="ChefGPT">
-            <div className="chef-logo">
+            <div className="chef-logo navi-btn">
               <Link to={"../nomgpt"}>
                 <img src="../../public/logohat.png" alt="ChefGPT Logo" />
               </Link>
@@ -33,24 +33,24 @@ function Navigation() {
             </h1>
           </div>
           <div className="home">
-            <Link className="no-link-style" to={"../nomgpt/discover"}>
-              <h2>Discover</h2>
+            <Link className="no-link-style navi-btn" to={"../nomgpt/discover"}>
+              <h2>Explore</h2>
             </Link>
           </div>
           <div className="generate-recipes">
-            <Link className="no-link-style" to={"../nomgpt/generate"}>
+            <Link className="no-link-style navi-btn" to={"../nomgpt/generate"}>
               <h2>Generate</h2>
             </Link>
           </div>
           <div className="favourite">
-            <Link className="no-link-style" to={"../nomgpt/favourite"}>
+            <Link className="no-link-style navi-btn" to={"../nomgpt/favourite"}>
               <h2>Favourite</h2>
             </Link>
           </div>
-          <div className="category">
+          <div className="category navi-btn">
             <h2>Categories</h2>
           </div>
-          <div className="famous">
+          <div className="famous navi-btn">
             <h2>Famous</h2>
           </div>
         </div>
@@ -61,7 +61,7 @@ function Navigation() {
               className={`material-symbols-outlined ${theme}`}
               onClick={toggleTheme} // Use toggleTheme from context
             >
-              {theme === "light" ? "wb_sunny" : "wb_sunny"}
+              {theme === "light" ? "wb_sunny" : "routine"}
             </span>
           </div>
           <div className="profile">

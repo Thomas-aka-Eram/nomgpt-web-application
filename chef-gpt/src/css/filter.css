@@ -1,0 +1,7 @@
+.filter-container {
+  width: 30%;
+  height: 90vh;
+  padding: 10px;
+
+  border: 1px solid black;
+}

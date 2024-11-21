@@ -23,3 +23,26 @@ export const getRequest = async (url: string) => {
     return { error: true, message: "Network error" };
   }
 };
+
+export const postRequest = async (url: string, body: any): Promise<any> => {
+  const apiurl = `${BASE_URL}${url}`;
+  const options: RequestInit = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // Ensure the server knows you're sending JSON
+    },
+    body: JSON.stringify(body), // Serialize the body as JSON
+  };
+
+  const response = await fetch(apiurl, options);
+  const data = await response.json();
+
+  if (!response.ok) {
+    let message = data?.message ? data.message : data;
+    return { error: true, message };
+  }
+
+  console.log(data, "post request data")
+  return data;
+};
+

@@ -93,11 +93,18 @@
   letter-spacing: 0.9px;
 }
 
+/* navigation button animation */
+.navi-btn:hover {
+  color: var(--feature-color);
+}
+
 /* LIGHT OR DARK */
 
 .chef-account > .theme > span {
   font-size: 2rem;
   color: var(--main-color);
+
+  transition: all linear 0.3s;
 }
 
 .material-symbols-outlined.light {
@@ -106,6 +113,6 @@
 }
 
 .material-symbols-outlined.dark {
-  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 54;
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 54;
   transition: linear 0.2s all;
 }
