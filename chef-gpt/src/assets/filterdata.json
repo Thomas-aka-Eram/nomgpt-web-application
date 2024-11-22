@@ -1,0 +1,8 @@
+{
+    "filter-cuisine": ["italian", "mexican", "chinese", "american", "indian"],
+    "filter-mealType": ["breakfast", "lunch", "dinner"],
+    "filter-dishType":["Soup"],
+    "filter-diet": ["low-carb", "high-protein", "balanced"],
+    "filter-health": ["gluten-free", "vegan", "paleo"]
+  }
+  

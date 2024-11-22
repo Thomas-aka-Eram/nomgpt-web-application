@@ -71,3 +71,17 @@ export interface Digest {
   unit: string;
   sub?: Digest[]; // Nested digest
 }
+
+
+export interface LocalFilters {
+  ingredients: string[];
+  excluded: string[];
+  diet?: string[];
+  health?: string[];
+  cuisine?: string;
+  mealType?: string;
+  dishType?: string;
+  calories?: string;
+  time?: string;
+}
+

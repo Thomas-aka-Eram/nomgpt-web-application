@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import filterOptions from "../assets/filterdata.json";
+import { LocalFilters } from "./types";
 import "../css/filter.css";
+
 interface FilterProps {
   setFilters: React.Dispatch<React.SetStateAction<any>>;
 }
+
 const Filter: React.FC<FilterProps> = ({ setFilters }) => {
-  const [localFilters, setLocalFilters] = useState({
+  const [localFilters, setLocalFilters] = useState<LocalFilters>({
     ingredients: [],
     diet: [],
     health: [],
@@ -13,86 +17,163 @@ const Filter: React.FC<FilterProps> = ({ setFilters }) => {
     dishType: "",
     calories: "",
     time: "",
+    excluded: [],
+  });
+  const [currentInputs, setCurrentInputs] = useState({
+    ingredients: "",
     excluded: "",
   });
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const [timeRange, setTimeRange] = useState(1); // Single range value
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setLocalFilters((prev) => ({
+    setCurrentInputs((prev) => ({
       ...prev,
       [name]: value,
     }));
-
-    console.log(localFilters.ingredients);
   };
 
-  const handleMultiSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, options } = e.target;
-    const values = Array.from(options)
-      .filter((option) => option.selected)
-      .map((option) => option.value);
-    setLocalFilters((prev: any) => ({
-      ...prev,
-      [name]: values,
-    }));
-  };
-
-  const handleEnter = (e: React.KeyboardEvent<HTMLSelectElement>) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      const { name } = e.currentTarget;
+      if (currentInputs[name as keyof typeof currentInputs].trim() !== "") {
+        setLocalFilters((prev) => ({
+          ...prev,
+          [name]: [
+            ...(prev[name as keyof typeof localFilters] as string[]),
+            currentInputs[name as keyof typeof currentInputs].trim(),
+          ],
+        }));
+        setCurrentInputs((prev) => ({
+          ...prev,
+          [name]: "",
+        }));
+      }
     }
   };
 
-  const handleSubmit = () => {
-    // Pass local filters to parent component
-    setFilters(localFilters);
+  const handleCheckboxChange = <T extends keyof LocalFilters>(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value, checked } = e.target;
+    setLocalFilters((prev) => ({
+      ...prev,
+      [name as T]: checked
+        ? [...(prev[name as T] as string[]), value]
+        : (prev[name as T] as string[]).filter((item) => item !== value),
+    }));
   };
+
+  const handleDeleteItem = (filterKey: string, item: string) => {
+    setLocalFilters((prev) => ({
+      ...prev,
+      [filterKey]: (
+        prev[filterKey as keyof typeof localFilters] as string[]
+      ).filter((i) => i !== item),
+    }));
+  };
+
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTimeRange(parseInt(e.target.value)); // Set the time range value
+  };
+
+  const handleSubmit = () => {
+    setFilters({ ...localFilters, time: `>${timeRange}` }); // Fetch data greater than the selected time value
+  };
+
   return (
-    <>
-      <div className="filter-container">
-        <h2>Filter Recipes</h2>
-        <div className="filtertv">
+    <div className="filter-container">
+      <h2>Filter Recipes</h2>
+      <div className="filter">
+        <div className="filter-group">
+          <label>Ingredients</label>
+          <input
+            type="text"
+            name="ingredients"
+            value={currentInputs.ingredients}
+            onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
+            placeholder="e.g., chicken, rice"
+          />
           <ul>
-            {Object.entries(localFilters)
-              .filter(([key, value]) => {
-                // Exclude empty or default values
-                if (Array.isArray(value)) return value.length > 0; // Check arrays
-                return value; // Check strings or numbers
-              })
-              .map(([key, value]) => (
-                <li key={key}>
-                  <strong>{key}:</strong>{" "}
-                  {Array.isArray(value) ? value.join(", ") : value.toString()}
-                </li>
-              ))}
+            {localFilters.ingredients.map((ingredient) => (
+              <li key={ingredient}>
+                {ingredient}
+                <button
+                  onClick={() => handleDeleteItem("ingredients", ingredient)}
+                >
+                  x
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
-        <div className="filter">
-          <div className="filter-group">
-            <label>Ingredients</label>
+
+        {Object.keys(filterOptions).map((key) => {
+          const filterKey = key.replace("filter-", "");
+          return (
+            <div key={key} className="filter-group">
+              <label>
+                {filterKey.charAt(0).toUpperCase() + filterKey.slice(1)}
+              </label>
+              <div className="filterbox">
+                {(
+                  filterOptions[key as keyof typeof filterOptions] as string[]
+                ).map((option) => (
+                  <div key={option}>
+                    <input
+                      id={`${option}`}
+                      type="checkbox"
+                      name={filterKey}
+                      value={option}
+                      onChange={handleCheckboxChange}
+                    />
+                    <label htmlFor={option}>{option}</label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+
+        <div className="filter-group">
+          <label>Excluded Ingredients</label>
+          <input
+            type="text"
+            name="excluded"
+            value={currentInputs.excluded}
+            onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
+            placeholder="e.g., peanuts, eggs"
+          />
+        </div>
+
+        <div className="time-input-container">
+          <label>Time Duration (Minutes):</label>
+          <div className="time-range-picker">
             <input
-              type="text"
-              name="ingredients"
-              value={localFilters.ingredients}
-              onChange={handleInputChange}
-              placeholder="e.g., chicken, rice"
+              type="range"
+              min="1"
+              max="100"
+              step="1"
+              value={timeRange}
+              onChange={handleTimeChange}
+              className="range-input"
             />
+            <div className="time-values">
+              <span>Min: 0</span>
+              <span>Max: 100</span>
+            </div>
           </div>
-          <div className="filter-group">
-            <label>Excluded Ingredients</label>
-            <input
-              type="text"
-              name="excluded"
-              value={localFilters.excluded}
-              onChange={handleInputChange}
-              placeholder="e.g., peanuts, eggs"
-            />
+          <div className="selected-time">
+            <span>Selected Time: {timeRange} min</span>
           </div>
         </div>
+
         <button onClick={handleSubmit}>Search Recipes</button>
       </div>
-    </>
+    </div>
   );
 };
 
