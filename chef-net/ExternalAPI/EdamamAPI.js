@@ -110,6 +110,7 @@ const fetchFilterRecipes = async (req, res) => {
 
         // Build the full URL
         const url = `https://api.edamam.com/api/recipes/v2?${queryParams.toString()}`;
+        console.log(url)
 
         // Fetch data from Edamam API
         const response = await axios.get(url);

@@ -5,8 +5,9 @@
 }
 
 .filter-container {
-  width: 30%;
+  width: 20%;
   height: 100%;
+  overflow: auto;
   padding: 10px;
   user-select: none;
 
@@ -18,106 +19,230 @@
   .filter {
     width: 100%;
     height: 100%;
-    background-color: green;
 
     .filter-group {
       width: 100%;
-      height: auto;
-      background-color: blue;
+      height: fit-content;
+      margin-top: 5px;
 
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      align-items: start;
 
-      label {
+      position: relative;
+
+      .selected-items {
         width: 100%;
+        height: fit-content;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+
+        display: flex;
+        flex-wrap: wrap;
+
+        .selected-item {
+          width: calc(fit-content);
+          height: 2rem;
+          padding: 5px;
+          margin: 3px;
+
+          border-radius: 0.5rem;
+          border: 1px solid var(--border-color);
+          background-color: var(--box-color);
+          display: flex;
+          justify-content: space-between;
+
+          .remove-button {
+            width: 1rem;
+            color: var(--text-color);
+            margin-left: 2px;
+            background-color: transparent;
+            border: none;
+
+            font-size: 0.5rem;
+            font-weight: bold;
+          }
+        }
+
+        .selected-item.excluded {
+          background-color: var(--allergies-box-color);
+        }
+      }
+
+      .dropdown-label {
+        width: 100%;
+        padding: 10px;
+        max-height: 5rem;
+        overflow: auto;
+
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+
         font-weight: bold;
+        margin-bottom: 5px;
+        cursor: pointer;
+        color: var(--text-color);
+        font-size: 1rem;
+        text-align: left;
+        transition: color 0.2s ease;
+
+        display: flex;
+        justify-content: space-between;
+
+        .dropicon {
+          display: block;
+          font-size: 0.8rem;
+        }
+
+        .selected-filters {
+          width: fit-content;
+
+          .selected-sfilter {
+            width: fit-content;
+            text-transform: uppercase;
+          }
+        }
+      }
+
+      .dropdown-label::-webkit-scrollbar {
+        display: none;
+      }
+
+      .dropdown-label:hover .dropicon {
+        display: block;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        height: calc(fit-content + 10px);
+        padding: 10px;
+        background-color: var(--input-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+
+        color: var(--text-color);
+        font-family: var(--main-font-family);
+        font-size: 1rem;
+        transition: border-color 0.2s ease, background-color 0.2s ease;
+      }
+
+      input[type="text"]:focus {
+        outline: none;
+        border-color: var(--focus-color);
+        background-color: var(--focus-bg);
       }
 
       .filterbox {
         width: 100%;
         height: fit-content;
-        background-color: red;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: start;
 
-        div {
-          width: fit-content;
-          margin: 2px;
-          padding: 8px 16px;
+        .dropdown-content {
+          width: 100%;
+          height: fit-content;
+          max-height: 150px;
+          border-radius: 10px;
           border: 1px solid var(--border-color);
-          border-radius: 5%;
-          text-transform: capitalize;
+          overflow: auto;
 
-          input[type="checkbox"] {
-            display: none;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-end;
+
+          .close-button {
+            background-color: transparent;
+            border: none;
           }
-          input[type="checkbox"]:checked {
-            color: red;
-            background-color: var(--main-color);
+
+          .checkbox-option {
+            width: 100%;
+            cursor: pointer;
+
+            input {
+              display: none;
+            }
+
+            label {
+              width: 100%;
+              border: none;
+
+              font-size: 1rem;
+              font-family: var(--main-font-family);
+
+              display: flex;
+              justify-content: space-between;
+              padding: 10px 5px;
+              border-radius: 0px;
+
+              text-transform: capitalize;
+
+              span {
+                width: 10%;
+                color: green;
+                font-size: 0.8rem;
+                display: none;
+              }
+            }
+
+            input[type="checkbox"]:checked + label {
+              background-color: var(--main-color);
+            }
+            input[type="checkbox"]:checked + label span {
+              display: block;
+            }
           }
         }
-        div:has(input[type="checkbox"]:checked) {
-          background-color: var(--main-color);
-          color: red;
+
+        .dropdown-content::-webkit-scrollbar {
+          width: 10px;
+          background-color: rgba(191, 191, 191, 0.699);
+        }
+        .dropdown-content::-webkit-scrollbar-thumb {
+          width: 10px;
+          background-color: rgba(168, 168, 168, 0.699);
         }
       }
+    }
+
+    .submit-button {
+      width: 100%;
+      height: 2rem;
+      cursor: pointer;
+
+      background-color: var(--button-color);
+      border-radius: 5px;
+      border: none;
+    }
+    .submit-button:hover {
+      background-color: var(--button-color-hover);
+    }
+    .submit-button:active {
+      background-color: transparent;
+      font-size: 1.1rem;
+      color: var(--main-color);
+      transition: all 0.2s linear;
+    }
+    .clear-button {
+      width: 100%;
+      height: 2rem;
+      margin-top: 10px;
+      cursor: pointer;
+      color: var(--text-color);
+
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+    }
+    .clear-button:hover {
+      border: 2px solid var(--border-color);
+    }
+    .clear-button:active {
+      color: var(--feature-color);
     }
   }
 }
 
-.time-input-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.time-range-picker {
-  position: relative;
-  width: 100%;
-  max-width: 300px;
-}
-
-.slider-line {
-  position: absolute;
-  width: 100%;
-  height: 5px;
-  background: #ddd;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.moving-dot {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: blue;
-  transition: left 0.1s ease;
-}
-
-.left-dot {
-  background-color: red;
-}
-
-.right-dot {
-  background-color: green;
-}
-
-.range-input {
-  position: absolute;
-  width: 100%;
-  opacity: 0; /* Keep it invisible */
-  pointer-events: all; /* Allow interaction */
-  z-index: 1; /* Ensure input is above the slider line */
-}
-
-.time-values {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+.filter-container::-webkit-scrollbar {
+  display: none;
 }

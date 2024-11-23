@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { Recipe } from "../components/types";
 import Navigation from "../components/Navigation";
@@ -26,10 +26,14 @@ function Discover() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
+  const [hasMore, setHasMore] = useState(true); // Track if there is more data
+  const lastItemRef = useRef<HTMLDivElement | null>(null);
 
   const fetchDiscoverData = async () => {
-    console.log(filters, "BEFORE fetching");
     try {
+      setIsLoading(true);
+      let data;
+
       if (
         Object.values(filters).every(
           (value) =>
@@ -37,49 +41,85 @@ function Discover() {
             (typeof value === "string" && value.trim() === "") // Check for empty strings
         )
       ) {
-        const [data] = await Promise.all([
-          getRequest(`/random`),
-          new Promise((resolve) => setTimeout(resolve, 2000)), // 2-second timeout
-        ]);
-        setRecipes(data);
+        // Fetch random recipes if no filters
+        data = await getRequest(`/random`);
       } else {
-        const [data] = await Promise.all([
-          postRequest(`/filter`, filters),
-          new Promise((resolve) => setTimeout(resolve, 2000)), // 2-second timeout
-        ]);
-        console.log(data, "FETCHING WITH FILTER");
-        setRecipes(data);
+        // Fetch filtered recipes
+        data = await postRequest(`/filter`, filters);
+      }
+
+      if (data.length === 0) {
+        setHasMore(false); // No more data to load
+      } else {
+        setRecipes((prev) => [...prev, ...data]); // Append the new data to the existing list
       }
     } catch (error) {
       console.error("ERROR WHILE FETCHING DATA", error);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    }
+  };
+
+  const handleObserver = ([entry]: IntersectionObserverEntry[]) => {
+    if (entry.isIntersecting && hasMore && !isLoading) {
+      fetchDiscoverData();
     }
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    // Create the IntersectionObserver
+    const observer = new IntersectionObserver(handleObserver, {
+      rootMargin: "0px",
+      threshold: 1.0, // Trigger when the last item is fully visible
+    });
+
+    if (lastItemRef.current) {
+      observer.observe(lastItemRef.current); // Observe the last item
+    }
+
+    // Cleanup observer on component unmount
+    return () => {
+      if (lastItemRef.current) {
+        observer.unobserve(lastItemRef.current);
+      }
+    };
+  }, [isLoading, hasMore]);
+
+  useEffect(() => {
+    setRecipes([]); // Reset recipes on filters change
+    setHasMore(true); // Reset "hasMore" when filters change
     fetchDiscoverData();
-  }, [location, filters]);
+  }, [location, filters]); // Fetch data whenever location or filters change
 
   return (
     <>
       <Navigation></Navigation>
       <div className="discover-container">
         <Filter setFilters={setFilters}></Filter>
-        <div className="discover">
-          <FilterDisplay filterdata={filters} />
-          {isLoading ? (
-            <div className="discover-loading">
-              <LottieLoading></LottieLoading>
-            </div>
-          ) : (
-            <>
-              {recipes.map((recipe, index) => (
-                <Foodpost key={index} recipedata={recipe} />
-              ))}
-            </>
-          )}
+        <div className="discover-body">
+          <div className="discover">
+            {isLoading && recipes.length === 0 ? (
+              <div className="discover-loading">
+                <LottieLoading />
+              </div>
+            ) : (
+              <>
+                {recipes.map((recipe, index) => (
+                  <Foodpost key={index} recipedata={recipe} />
+                ))}
+                {hasMore && (
+                  <div ref={lastItemRef} style={{ height: "20px" }} />
+                )}
+                {isLoading && (
+                  <div className="more-loading">
+                    <LottieLoading></LottieLoading>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </>

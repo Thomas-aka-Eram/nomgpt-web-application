@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { LocalFilters } from "./types";
+import "../css/filterdisplay.css";
 
 interface FilterDisplay {
   filterdata: LocalFilters;

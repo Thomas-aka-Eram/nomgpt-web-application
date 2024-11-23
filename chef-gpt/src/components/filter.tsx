@@ -19,13 +19,15 @@ const Filter: React.FC<FilterProps> = ({ setFilters }) => {
     time: "",
     excluded: [],
   });
+
   const [currentInputs, setCurrentInputs] = useState({
     ingredients: "",
     excluded: "",
   });
 
-  const [timeRange, setTimeRange] = useState(1); // Single range value
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
+  // Handle input value change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCurrentInputs((prev) => ({
@@ -34,15 +36,18 @@ const Filter: React.FC<FilterProps> = ({ setFilters }) => {
     }));
   };
 
+  // Handle input submission with "Enter"
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const { name } = e.currentTarget;
-      if (currentInputs[name as keyof typeof currentInputs].trim() !== "") {
+      const trimmedValue =
+        currentInputs[name as keyof typeof currentInputs].trim();
+      if (trimmedValue !== "") {
         setLocalFilters((prev) => ({
           ...prev,
           [name]: [
             ...(prev[name as keyof typeof localFilters] as string[]),
-            currentInputs[name as keyof typeof currentInputs].trim(),
+            trimmedValue,
           ],
         }));
         setCurrentInputs((prev) => ({
@@ -53,6 +58,7 @@ const Filter: React.FC<FilterProps> = ({ setFilters }) => {
     }
   };
 
+  // Handle checkbox change for dropdown filters
   const handleCheckboxChange = <T extends keyof LocalFilters>(
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -65,113 +71,181 @@ const Filter: React.FC<FilterProps> = ({ setFilters }) => {
     }));
   };
 
-  const handleDeleteItem = (filterKey: string, item: string) => {
+  // Remove selected filter item
+  const handleDeleteItem = (filterKey: keyof LocalFilters, item: string) => {
     setLocalFilters((prev) => ({
       ...prev,
-      [filterKey]: (
-        prev[filterKey as keyof typeof localFilters] as string[]
-      ).filter((i) => i !== item),
+      [filterKey]: (prev[filterKey] as string[]).filter((i) => i !== item),
     }));
   };
 
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTimeRange(parseInt(e.target.value)); // Set the time range value
+  // Toggle dropdown visibility
+  // const toggleDropdown = (key: string) => {
+  //   setDropdownState((prev) => ({
+  //     ...prev,
+  //     [key]: !prev[key],
+  //   }));
+  // };
+  const toggleDropdown = (key: string) => {
+    setOpenDropdown((prev) => (prev === key ? null : key));
   };
 
+  // Submit filters
   const handleSubmit = () => {
-    setFilters({ ...localFilters, time: `>${timeRange}` }); // Fetch data greater than the selected time value
+    setFilters({ ...localFilters });
+  };
+
+  const handleCancle = () => {
+    setLocalFilters({
+      ingredients: [],
+      diet: [],
+      health: [],
+      cuisine: "",
+      mealType: "",
+      dishType: "",
+      calories: "",
+      time: "",
+      excluded: [],
+    });
+
+    setOpenDropdown(() => null);
   };
 
   return (
     <div className="filter-container">
       <h2>Filter Recipes</h2>
       <div className="filter">
+        {/* Ingredients Input */}
         <div className="filter-group">
-          <label>Ingredients</label>
+          <ul className="selected-items">
+            {localFilters.ingredients.map((ingredient) => (
+              <li key={ingredient} className="selected-item">
+                {ingredient}
+                <button
+                  className="remove-button"
+                  onClick={() => handleDeleteItem("ingredients", ingredient)}
+                >
+                  ✕
+                </button>
+              </li>
+            ))}
+          </ul>
           <input
+            autoComplete="off"
             type="text"
             name="ingredients"
             value={currentInputs.ingredients}
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
-            placeholder="e.g., chicken, rice"
+            placeholder="Add Ingredients"
           />
-          <ul>
-            {localFilters.ingredients.map((ingredient) => (
-              <li key={ingredient}>
-                {ingredient}
+        </div>
+
+        {/* Excluded Ingredients Input */}
+        <div className="filter-group">
+          <ul className="selected-items">
+            {localFilters.excluded.map((excluded) => (
+              <li key={excluded} className={`selected-item excluded`}>
+                {excluded}
                 <button
-                  onClick={() => handleDeleteItem("ingredients", ingredient)}
+                  className="remove-button"
+                  onClick={() => handleDeleteItem("excluded", excluded)}
                 >
-                  x
+                  ✕
                 </button>
               </li>
             ))}
           </ul>
-        </div>
-
-        {Object.keys(filterOptions).map((key) => {
-          const filterKey = key.replace("filter-", "");
-          return (
-            <div key={key} className="filter-group">
-              <label>
-                {filterKey.charAt(0).toUpperCase() + filterKey.slice(1)}
-              </label>
-              <div className="filterbox">
-                {(
-                  filterOptions[key as keyof typeof filterOptions] as string[]
-                ).map((option) => (
-                  <div key={option}>
-                    <input
-                      id={`${option}`}
-                      type="checkbox"
-                      name={filterKey}
-                      value={option}
-                      onChange={handleCheckboxChange}
-                    />
-                    <label htmlFor={option}>{option}</label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-
-        <div className="filter-group">
-          <label>Excluded Ingredients</label>
           <input
+            autoComplete="off"
             type="text"
             name="excluded"
             value={currentInputs.excluded}
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
-            placeholder="e.g., peanuts, eggs"
+            placeholder="Excluded Ingredients"
           />
         </div>
 
-        <div className="time-input-container">
-          <label>Time Duration (Minutes):</label>
-          <div className="time-range-picker">
-            <input
-              type="range"
-              min="1"
-              max="100"
-              step="1"
-              value={timeRange}
-              onChange={handleTimeChange}
-              className="range-input"
-            />
-            <div className="time-values">
-              <span>Min: 0</span>
-              <span>Max: 100</span>
-            </div>
-          </div>
-          <div className="selected-time">
-            <span>Selected Time: {timeRange} min</span>
-          </div>
-        </div>
+        {/* Dynamic Filters */}
+        {Object.keys(filterOptions).map((key) => {
+          const filterKey = key.replace("filter-", "") as keyof LocalFilters; // Cast filterKey to keyof LocalFilters
 
-        <button onClick={handleSubmit}>Search Recipes</button>
+          return (
+            <div key={key} className="filter-group">
+              {/* Selected items for the filter */}
+
+              <label
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent handleClickOutside from firing
+                  toggleDropdown(filterKey); // Open/close the clicked dropdown
+                }}
+                className="dropdown-label"
+              >
+                {Array.isArray(localFilters[filterKey]) &&
+                localFilters[filterKey].length > 0 ? (
+                  // Show selected filters if available
+                  <div className="selected-filters">
+                    {(localFilters[filterKey] as string[]).map(
+                      (item, index, array) => (
+                        <span key={item} className="selected-sfilter">
+                          {item}
+                          {index < array.length - 1 && " & "}
+                        </span>
+                      )
+                    )}
+                  </div>
+                ) : (
+                  // Default label text if no filters are selected
+                  filterKey.charAt(0).toUpperCase() + filterKey.slice(1)
+                )}
+                <span className="dropicon">
+                  {openDropdown === filterKey ? "❌" : "🥕"}
+                </span>
+              </label>
+
+              {openDropdown === filterKey && (
+                <div className="filterbox">
+                  <div className="dropdown-content">
+                    {(
+                      filterOptions[
+                        key as keyof typeof filterOptions
+                      ] as string[]
+                    ).map((option) => (
+                      <div key={option} className="checkbox-option">
+                        <input
+                          id={`${filterKey}-${option}`}
+                          type="checkbox"
+                          name={filterKey}
+                          value={option}
+                          checked={
+                            Array.isArray(localFilters[filterKey]) &&
+                            (localFilters[filterKey] as string[]).includes(
+                              option
+                            )
+                          }
+                          onChange={handleCheckboxChange}
+                        />
+                        <label htmlFor={`${filterKey}-${option}`}>
+                          {option}
+                          <span>✓</span>
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+
+        {/* Submit Button */}
+        <button className="submit-button" onClick={handleSubmit}>
+          Nom Nom
+        </button>
+        <button className="clear-button" onClick={handleCancle}>
+          Cancle
+        </button>
       </div>
     </div>
   );

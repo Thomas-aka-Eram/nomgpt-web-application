@@ -11,18 +11,26 @@
 :root {
   color-scheme: light dark;
   --main-font-family: "Markazi Text", serif;
-  --main-color: rgb(16, 185, 129);
+  --logo-color: rgb(16, 185, 129);
+  --main-color: rgb(8, 207, 141);
   --main-color-hover: rgb(13, 156, 109);
   --feature-color: rgb(236, 61, 61);
-  --border-color: grey;
+  --border-color: rgba(193, 193, 193, 0.488);
+  --border-color-glow: rgba(146, 176, 184, 0.663);
+  --button-color: rgb(16, 185, 129);
+  --button-color-hover: rgb(13, 156, 109);
+  --box-color: rgba(131, 212, 185, 0.73);
+  --allergies-box-color: rgba(233, 100, 100, 0.616);
 
   --text-color: #282828;
   --bg-mode: #f0f0f0;
+  --bg-img: url("../assets/lightbg.svg");
 }
 
 [color-theme="dark"] {
   --text-color: #f0f0f0;
   --bg-mode: #121212;
+  --bg-img: url("../assets//darkbg.svg");
 }
 
 /* giving body some padding  */
@@ -31,6 +39,10 @@ body {
   font-family: var(--main-font-family);
   font-size: 1.2em;
   font-weight: lighter;
+  background-image: var(--bg-img);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
 }
 
 .no-link-logo {
