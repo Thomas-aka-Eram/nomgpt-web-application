@@ -21,6 +21,8 @@
   --button-color-hover: rgb(13, 156, 109);
   --box-color: rgba(131, 212, 185, 0.73);
   --allergies-box-color: rgba(233, 100, 100, 0.616);
+  --selected-bg-color: #eeeeee;
+  --selected-blur-color: rgba(179, 219, 206, 0.91);
 
   --text-color: #282828;
   --bg-mode: #f0f0f0;

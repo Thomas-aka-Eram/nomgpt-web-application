@@ -5,7 +5,7 @@ import { Recipe } from "../components/types";
 import Navigation from "../components/Navigation";
 import Filter from "../components/filter";
 import Foodpost from "../components/foodpost";
-import FilterDisplay from "../components/filterdisplay";
+import FoodDetails from "../components/fooddetails";
 import "../css/theme.css";
 import "../css/discover.css";
 import { getRequest, postRequest } from "../utils/services";
@@ -24,6 +24,7 @@ function Discover() {
     time: "",
     excluded: [],
   });
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const [hasMore, setHasMore] = useState(true); // Track if there is more data
@@ -32,6 +33,7 @@ function Discover() {
   const fetchDiscoverData = async () => {
     try {
       setIsLoading(true);
+      setSelectedRecipe(null);
       let data;
 
       if (
@@ -99,16 +101,44 @@ function Discover() {
       <div className="discover-container">
         <Filter setFilters={setFilters}></Filter>
         <div className="discover-body">
-          <div className="discover">
+          <div className={selectedRecipe ? `discover ovhid` : `discover `}>
             {isLoading && recipes.length === 0 ? (
               <div className="discover-loading">
                 <LottieLoading />
               </div>
             ) : (
               <>
-                {recipes.map((recipe, index) => (
-                  <Foodpost key={index} recipedata={recipe} />
-                ))}
+                {selectedRecipe ? (
+                  <div className="selected-recipe">
+                    <div className="selected-container">
+                      <FoodDetails recipedata={selectedRecipe} />
+                      <button
+                        className="back-button"
+                        onClick={() => setSelectedRecipe(null)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {recipes ? (
+                  recipes.map((recipe, index) => (
+                    <div
+                      key={index}
+                      onClick={() => setSelectedRecipe(recipe)}
+                      className="recipe-item"
+                    >
+                      <Foodpost recipedata={recipe} />
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <h1>NO DATA</h1>
+                  </>
+                )}
+
                 {hasMore && (
                   <div ref={lastItemRef} style={{ height: "20px" }} />
                 )}

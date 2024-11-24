@@ -1,0 +1,87 @@
+.fooddetails-container {
+  width: calc(100% - 3.5rem);
+  height: 100%;
+  position: relative;
+
+  /* Progress bar styling */
+  .scroll-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background-color: var(--main-color);
+    width: 0; /* Will dynamically change */
+    transition: width 0.2s ease;
+  }
+
+  .fooddetails {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+
+    /* Firefox scrollbar */
+    scrollbar-width: auto;
+    scrollbar-color: var(--primary-color) var(--bg-mode);
+
+    /* WebKit scrollbar */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .recipe-info {
+      width: 100%;
+      height: fit-content;
+
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+
+      .food-overview {
+        width: 50%;
+        height: fit-content;
+
+        .recipe-title {
+          color: var(--main-color);
+        }
+      }
+
+      .foodimage-container {
+        width: 50%;
+        height: 100%;
+
+        /* background-color: red; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .foodimage {
+          width: 100%;
+          height: 300px;
+          max-width: 400px;
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+          }
+        }
+      }
+    }
+
+    .foods {
+      width: 100%;
+      margin-top: 10px;
+
+      div {
+        width: fit-content;
+      }
+      .recipe-ingredients {
+        width: 400px;
+      }
+    }
+  }
+}

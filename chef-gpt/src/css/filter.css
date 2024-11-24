@@ -46,6 +46,7 @@
           height: 2rem;
           padding: 5px;
           margin: 3px;
+          text-transform: capitalize;
 
           border-radius: 0.5rem;
           border: 1px solid var(--border-color);
@@ -148,7 +149,7 @@
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
-          align-items: flex-end;
+          align-items: flex-start;
 
           .close-button {
             background-color: transparent;
@@ -196,6 +197,7 @@
 
         .dropdown-content::-webkit-scrollbar {
           width: 10px;
+
           background-color: rgba(191, 191, 191, 0.699);
         }
         .dropdown-content::-webkit-scrollbar-thumb {
