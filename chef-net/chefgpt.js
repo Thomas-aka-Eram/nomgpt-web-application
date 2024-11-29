@@ -1,22 +1,24 @@
-const express = require("express")
-const cors = require("cors")
-const path = require("path")
-const mongoose = require('mongoose')
-const GeneralRoute = require("./Routes/GeneralRoutes")
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import GeneralRoutes from "./Routes/GeneralRoutes.js";
+
+dotenv.config();
 
 const app = express();
-require('dotenv').config();
 
 app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:5173'
 }));
 
-app.use("/api/", GeneralRoute);
+app.use("/api/", GeneralRoutes);
 
 const port = process.env.PORT || 5000;
 const uri = process.env.DB_KEY;
 
+// Connect to MongoDB
 mongoose
     .connect(uri, {})
     .then(() => console.log('MongoDB connection established...'))
@@ -24,7 +26,7 @@ mongoose
         console.error('MongoDB connection error:', error);
     });
 
-
+// Start the server
 app.listen(port, '0.0.0.0', () => {
-    console.log(`server running on ${port}`)
-})
+    console.log(`server running on ${port}`);
+});

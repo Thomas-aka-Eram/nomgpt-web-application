@@ -1,14 +1,13 @@
-const express = require("express");
-const axios = require("axios");
-require("dotenv").config();
+import axios from "axios"
+import dotenv from "dotenv"
 
+dotenv.config();
 const EDAMAM_URL = "https://api.edamam.com/api/recipes/v2";
 const EDAMAM_APP_ID = process.env.EDAMAM_APP_ID;
 const EDAMAM_APP_KEY = process.env.EDAMAM_APP_KEY;
-const GPT_API_KEY = process.env.GPT_APP_KEY;
 
 // Random recipes to describe on the home page
-const fetchrandomRecipes = async (req, res) => {
+export const fetchrandomRecipes = async (req, res) => {
     try {
         const response = await axios.get(
             `${EDAMAM_URL}?type=public&q=dinner&app_id=${EDAMAM_APP_ID}&app_key=${EDAMAM_APP_KEY}&random=true`
@@ -24,7 +23,7 @@ const fetchrandomRecipes = async (req, res) => {
 };
 
 // Fetch recipes based on ingredients
-const fetchRecipes = async (req, res) => {
+export const fetchRecipes = async (req, res) => {
     try {
         const { ingredients } = req.body;
 
@@ -51,8 +50,7 @@ const fetchRecipes = async (req, res) => {
     }
 };
 
-const fetchFilterRecipes = async (req, res) => {
-    console.log(req.body);
+export const fetchFilterRecipes = async (req, res) => {
     try {
         const {
             ingredients = [],
@@ -122,8 +120,3 @@ const fetchFilterRecipes = async (req, res) => {
         res.status(500).json({ error: "Failed to fetch recipes" });
     }
 };
-
-
-
-
-module.exports = { fetchRecipes, fetchrandomRecipes, fetchFilterRecipes };

@@ -1,7 +1,7 @@
-const userModle = require('../Models/UserModel')
-const bcrypt = require('bcrypt')
-const validator = require('validator')
-const jwt = require('jsonwebtoken')
+import UserModel from '../Models/UserModel'
+import "bcrypt"
+import "validator"
+import "jsonwebtoken"
 
 const createToken = (_id) => {
     const jwtkey = process.env.JWT_SECRET_KEY;

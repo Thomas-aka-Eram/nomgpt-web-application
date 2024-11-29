@@ -1,5 +1,7 @@
-const express = require("express");
-const { fetchRecipes, fetchrandomRecipes, fetchFilterRecipes } = require("../ExternalAPI/EdamamAPI"); // Destructure the functions
+import express from "express";
+import { fetchRecipes, fetchrandomRecipes, fetchFilterRecipes } from "../ExternalAPI/EdamamAPI.js"; // Note the .js extension
+import { fetchGeneratedRecipe } from "../ExternalAPI/T5Generator.js"
+
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -12,7 +14,9 @@ router.post("/recipes", fetchRecipes);
 // GET endpoint for fetching random recipes
 router.get("/random", fetchrandomRecipes);
 
-// POST end point for filtering recipes
-router.post("/filter", fetchFilterRecipes)
+// POST endpoint for filtering recipes
+router.post("/filter", fetchFilterRecipes);
 
-module.exports = router;
+router.post("/generate", fetchGeneratedRecipe);
+
+export default router;
