@@ -85,3 +85,10 @@ export interface LocalFilters {
   time?: string;
 }
 
+export interface GeneratedRecipe{
+  recipe:{
+    Directions: string[],
+    Ingredients:string[],
+    Title:string
+  }
+}

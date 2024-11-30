@@ -167,9 +167,8 @@ const Filter: React.FC<FilterProps> = ({ setFilters }) => {
           />
         </div>
 
-        {/* Dynamic Filters */}
         {Object.keys(filterOptions).map((key) => {
-          const filterKey = key.replace("filter-", "") as keyof LocalFilters; // Cast filterKey to keyof LocalFilters
+          const filterKey = key.replace("filter-", "") as keyof LocalFilters;
 
           return (
             <div key={key} className="filter-group">
@@ -177,8 +176,8 @@ const Filter: React.FC<FilterProps> = ({ setFilters }) => {
 
               <label
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevent handleClickOutside from firing
-                  toggleDropdown(filterKey); // Open/close the clicked dropdown
+                  e.stopPropagation();
+                  toggleDropdown(filterKey);
                 }}
                 className="dropdown-label"
               >

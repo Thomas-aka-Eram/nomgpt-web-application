@@ -2,3 +2,4 @@
 .env
 ES6-test/
 node_modules/
+__pycache__
