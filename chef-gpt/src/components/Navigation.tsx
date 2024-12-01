@@ -1,6 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/navigation.css";
+import { useAuth } from "../context/UserContext";
 import { useTheme } from "../context/themecontext"; // Import the custom hook
 
 interface User {
@@ -10,6 +11,8 @@ interface User {
 function Navigation() {
   const [user, setUser] = React.useState<User>({ name: "Thomas Eram" });
   const { theme, toggleTheme } = useTheme(); // Access theme context
+  const { isAuthenticated, openModal, logout } = useAuth();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     // Simulate fetching user data if needed
@@ -42,11 +45,17 @@ function Navigation() {
               <h2>Generate</h2>
             </Link>
           </div>
-          <div className="favourite">
-            <Link className="no-link-style navi-btn" to={"../nomgpt/favourite"}>
-              <h2>Favourite</h2>
-            </Link>
-          </div>
+          {isAuthenticated && (
+            <div className="favourite">
+              <Link
+                className="no-link-style navi-btn"
+                to={"../nomgpt/favourite"}
+              >
+                <h2>Favourite</h2>
+              </Link>
+            </div>
+          )}
+
           <div className="category navi-btn">
             <h2>Categories</h2>
           </div>
@@ -65,7 +74,18 @@ function Navigation() {
             </span>
           </div>
           <div className="profile">
-            <h2>{user.name}</h2>
+            {isAuthenticated ? (
+              <button onClick={logout}>Logout</button>
+            ) : (
+              <div className="noAuth">
+                <button className="signin" onClick={openModal}>
+                  Sign In
+                </button>
+                <button className="signup" onClick={openModal}>
+                  Sign Up
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

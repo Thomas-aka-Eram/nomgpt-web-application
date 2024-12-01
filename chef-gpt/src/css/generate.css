@@ -215,7 +215,7 @@
       justify-content: space-between;
       align-items: center;
 
-      div {
+      .generate-intro {
         width: 50%;
         height: 100%;
         padding: 20px;
@@ -236,29 +236,6 @@
           font-size: 1.3rem;
         }
       }
-
-      .generate-button {
-        justify-content: center;
-        align-items: center;
-        button {
-          width: 350px;
-          height: 45px;
-          border-radius: 10px;
-          border: none;
-          font-size: 1rem;
-          font-weight: normal;
-          background-color: var(--main-color);
-
-          &:hover {
-            background-color: var(--main-color-hover);
-          }
-          &:active {
-            border: none;
-            color: black;
-            transition: all 1s linear;
-          }
-        }
-      }
     }
   }
 }
@@ -273,4 +250,65 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.generated-data {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .generated-recipe {
+    width: 50%;
+    height: fit-content;
+    padding: 20px;
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    animation: popUp 1s ease-out forwards;
+
+    h2 {
+      text-transform: uppercase;
+      font-size: 2rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+
+      p {
+        width: 80%;
+        font-weight: normal;
+      }
+    }
+    ul {
+      list-style: none;
+      padding: 0px 20px;
+
+      li {
+        list-style: disc;
+      }
+    }
+
+    span {
+      width: 100%;
+      font-size: 1rem;
+      font-style: italic;
+
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+
+@keyframes popUp {
+  0% {
+    transform: translateY(50px) scale(0); /* Starts below and scaled down */
+    opacity: 0; /* Invisible initially */
+  }
+  100% {
+    transform: translateY(0) scale(1); /* Ends in place with normal size */
+    opacity: 1; /* Fully visible */
+  }
 }

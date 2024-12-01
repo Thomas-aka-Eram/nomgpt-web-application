@@ -42,7 +42,6 @@ export const postRequest = async (url: string, body: any): Promise<any> => {
     return { error: true, message };
   }
 
-  console.log(data, "post request data")
   return data;
 };
 

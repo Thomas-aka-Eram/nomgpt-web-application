@@ -10,6 +10,7 @@ import "../css/theme.css";
 import "../css/discover.css";
 import { getRequest, postRequest } from "../utils/services";
 import LottieLoading from "../components/LottieLoading";
+import Layout from "../components/Layout";
 
 function Discover() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -96,8 +97,7 @@ function Discover() {
   }, [location, filters]); // Fetch data whenever location or filters change
 
   return (
-    <>
-      <Navigation></Navigation>
+    <Layout>
       <div className="discover-container">
         <Filter setFilters={setFilters}></Filter>
         <div className="discover-body">
@@ -152,7 +152,7 @@ function Discover() {
           </div>
         </div>
       </div>
-    </>
+    </Layout>
   );
 }
 

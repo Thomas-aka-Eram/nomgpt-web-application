@@ -2,12 +2,18 @@ import React, { useState, useEffect } from "react";
 import kitchen_tools from "../assets/kitchentool.json";
 import ingredientsData from "../assets/ingredients.json";
 import ToggleSwitch from "./toggleswitch";
+import GenerateButton from "./GenerateButton";
+import LottieLoading from "./LottieLoading";
 
 interface GenerateProps {
   setGenerateRecipe: React.Dispatch<React.SetStateAction<any>>;
+  isLoading: boolean;
 }
 
-const GeneratorForm: React.FC<GenerateProps> = ({ setGenerateRecipe }) => {
+const GeneratorForm: React.FC<GenerateProps> = ({
+  setGenerateRecipe,
+  isLoading,
+}) => {
   const [kitchenTools, setKitchenTools] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<string[]>([
     "Cheese",
@@ -36,15 +42,33 @@ const GeneratorForm: React.FC<GenerateProps> = ({ setGenerateRecipe }) => {
     }
   };
 
+  const handleSuggestionClick = (item: string) => {
+    if (item.startsWith('Add "')) {
+      // Add custom ingredient
+      const customItem = item.slice(5, -1); // Extract "example" from 'Add "example"'
+      addIngredient(customItem);
+    } else {
+      addIngredient(item); // Add selected item
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
+
+    // Filter suggestions that match the input
     const filteredSuggestions = ingredientsData.availableIngredients.filter(
       (item) =>
         item.toLowerCase().includes(value.toLowerCase()) &&
         !ingredients.includes(item)
     );
-    setSuggestions(filteredSuggestions);
+
+    // If no matches, add "Add `<inputValue>`" as a suggestion
+    if (value.trim() !== "" && !filteredSuggestions.includes(value)) {
+      setSuggestions([...filteredSuggestions, `Add "${value}"`]);
+    } else {
+      setSuggestions(filteredSuggestions);
+    }
   };
 
   const removeIngredient = (item: string) => {
@@ -58,6 +82,15 @@ const GeneratorForm: React.FC<GenerateProps> = ({ setGenerateRecipe }) => {
           ? prev.filter((t) => t !== tool) // Remove tool if selected
           : [...prev, tool] // Add tool if not selected
     );
+  };
+
+  const generate = () => {
+    const userInputData = {
+      ingredients,
+      kitchenTools,
+    };
+
+    setGenerateRecipe(userInputData);
   };
 
   return (
@@ -103,7 +136,8 @@ const GeneratorForm: React.FC<GenerateProps> = ({ setGenerateRecipe }) => {
                 <div
                   key={index}
                   className="suggestion-item"
-                  onClick={() => addIngredient(item)}
+                  onClick={() => handleSuggestionClick(item)}
+                  // onClick={() => addIngredient(item)}
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -117,7 +151,9 @@ const GeneratorForm: React.FC<GenerateProps> = ({ setGenerateRecipe }) => {
                   }}
                 >
                   {item}
-                  {ingredients.includes(item) && <span>✔</span>}
+                  {ingredients.includes(item) && !item.startsWith("Add ") && (
+                    <span>✔</span>
+                  )}
                 </div>
               ))}
             </div>
@@ -156,9 +192,17 @@ const GeneratorForm: React.FC<GenerateProps> = ({ setGenerateRecipe }) => {
             shopping cart too!
           </p>
         </div>
-        <div className="generate-button">
-          <button>Generate Your Recipe✨</button>
-        </div>
+        {/* <div className="generate-button">
+          {isLoading ? (
+            <div className="LoadingBar"></div>
+          ) : (
+            <button onClick={generate}>Generate Your Recipe✨</button>
+          )}
+        </div> */}
+        <GenerateButton
+          isLoading={isLoading}
+          generate={generate}
+        ></GenerateButton>
       </div>
     </div>
   );

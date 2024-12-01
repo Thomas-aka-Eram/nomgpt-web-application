@@ -1,16 +1,15 @@
 import React from "react";
-import Navigation from "../components/Navigation";
 import "../css/theme.css";
 import "../css/favourite.css";
+import Layout from "../components/Layout";
 
 function Favourite() {
   return (
-    <>
-      <Navigation></Navigation>
+    <Layout>
       <div className="favourite-container">
         <div className="favourite"></div>
       </div>
-    </>
+    </Layout>
   );
 }
 

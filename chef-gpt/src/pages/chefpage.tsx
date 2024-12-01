@@ -1,10 +1,10 @@
 import Navigation from "../components/Navigation";
+import Layout from "../components/Layout";
 import "../css/chefpage.css";
 
 function ChefPage() {
   return (
-    <>
-      <Navigation></Navigation>
+    <Layout>
       <div className="chefmaincontainer">
         <div className="firstpage">
           <div className="chefmainpage">
@@ -38,7 +38,7 @@ function ChefPage() {
           </div>
         </div>
       </div>
-    </>
+    </Layout>
   );
 }
 
