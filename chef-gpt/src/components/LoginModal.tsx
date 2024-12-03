@@ -1,24 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import { postRequest } from "../utils/services";
 import { jwtDecode } from "jwt-decode";
 import "../css/loginmodal.css"; // Import the provided CSS for modal styling
 
-interface DecodedToken {
-  sub: string;
-  name: string; // Use `name` as username here or modify as needed
-  email: string;
-  picture: string;
-}
-
 const LoginModal = () => {
-  const { showModal, closeModal, login } = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const handleCallbackResponse = (response: any) => {
-    const decodedToken: any = jwtDecode(response.credential);
-    console.log("Decoded Token:", decodedToken);
+  const navigate = useNavigate();
+
+  const handleCallbackResponse = async (response: any) => {
+    try {
+      // Send the raw ID token to the backend
+      const backendResponse = await postRequest("/google", {
+        idToken: response.credential,
+      });
+
+      // Log in the user in context
+      login(backendResponse.token);
+      navigate("/");
+    } catch (err) {
+      console.error("Google Login Error:", err);
+      setError("Failed to authenticate with Google.");
+    }
   };
 
   useEffect(() => {
@@ -45,7 +53,7 @@ const LoginModal = () => {
     }
 
     try {
-      const response = await fetch("/api/login", {
+      const response = await fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -53,8 +61,7 @@ const LoginModal = () => {
 
       const data = await response.json();
       if (response.ok) {
-        login({ username: data.username, email: data.email }); // Login via email and username
-        closeModal(); // Close modal after successful login
+        login(data.token);
       } else {
         setError(data.message || "Invalid email or password.");
       }
@@ -66,9 +73,15 @@ const LoginModal = () => {
   return (
     <div className="modal-overlay" id="modalOverlay">
       <div className="modal" id="loginModal">
-        <button className="close-btn" onClick={closeModal}>
-          ✕
-        </button>
+        <div className="back">
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            ✕
+          </button>
+        </div>
         <h1 className="h3 mb-3 mg-10 fw-normal text txtcolor">Welcome to</h1>
         <h3 className="h3 mb-5 fw-normal">Login to your account</h3>
         {error && <div className="error-message">{error}</div>}

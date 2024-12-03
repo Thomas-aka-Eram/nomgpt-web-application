@@ -1,30 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/UserContext"; // Assuming context is imported here
-import { jwtDecode } from "jwt-decode"; // If you want to keep Google login as an option
-import "../css/loginmodal.css"; // Import the provided CSS for modal styling
-
-interface DecodedToken {
-  sub: string;
-  name: string; // Use `name` as username here or modify as needed
-  email: string;
-  picture: string;
-}
+import { useAuth } from "../context/UserContext";
+import { Navigate, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import "../css/loginmodal.css";
+import { postRequest, getRequest } from "../utils/services";
 
 const SignupModal = () => {
-  const { showModal, closeModal, login } = useAuth();
-  const [username, setUsername] = useState(""); // Added username field for signup
+  const { login } = useAuth();
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // Added confirmation password field
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
-  // Google Login Callback
-  const handleCallbackResponse = (response: any) => {
-    const decodedToken: DecodedToken = jwtDecode(response.credential);
-    console.log("Google Decoded Token:", decodedToken);
-    // Logic for Google sign-up (same as login)
-    login({ username: decodedToken.name, email: decodedToken.email });
-    closeModal(); // Close modal after login
+  const handleCallbackResponse = async (response: any) => {
+    try {
+      // Send the raw ID token to the backend
+      const backendResponse = await postRequest("/google", {
+        idToken: response.credential,
+      });
+
+      // Log in the user in context
+      login(backendResponse.token);
+      navigate("/");
+    } catch (err) {
+      console.error("Google Login Error:", err);
+      setError("Failed to authenticate with Google.");
+    }
   };
 
   useEffect(() => {
@@ -45,7 +48,6 @@ const SignupModal = () => {
     e.preventDefault();
     setError(null);
 
-    // Basic validation
     if (!username || !email || !password || !confirmPassword) {
       setError("All fields are required.");
       return;
@@ -57,30 +59,33 @@ const SignupModal = () => {
     }
 
     try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
+      // Send registration data to backend
+      const response = await postRequest("/register", {
+        username,
+        email,
+        password,
       });
 
-      const data = await response.json();
-      if (response.ok) {
-        login({ username: data.username, email: data.email });
-        closeModal(); // Close modal after successful signup
-      } else {
-        setError(data.message || "Failed to sign up.");
-      }
-    } catch (error) {
-      setError("Something went wrong. Please try again later.");
+      // Log in the user in context
+      login(response.user);
+    } catch (err) {
+      console.error("Registration Error:", err);
+      setError("Registration failed. Please try again.");
     }
   };
 
   return (
     <div className="modal-overlay" id="modalOverlay">
       <div className="modal" id="signupModal">
-        <button className="close-btn" onClick={closeModal}>
-          ✕
-        </button>
+        <div className="back">
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            ✕
+          </button>
+        </div>
         <h1 className="h3 mb-3 mg-10 fw-normal text txtcolor">Welcome to</h1>
         <h3 className="h3 mb-5 fw-normal">Create an account</h3>
         {error && <div className="error-message">{error}</div>}
@@ -90,6 +95,7 @@ const SignupModal = () => {
             <input
               type="text"
               id="username"
+              autoComplete="off"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
@@ -101,6 +107,7 @@ const SignupModal = () => {
             <input
               type="email"
               id="email"
+              autoComplete="off"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"

@@ -1,10 +1,27 @@
 export const BASE_URL = "http://localhost:5000/api";
 
-export const getRequest = async (url: string) => {
-    const apiurl = `${BASE_URL}${url}`;
+export const getRequest = async (
+  url: string,
+  method: string = 'GET',
+  headers: Record<string, string> = {},
+  body: any = null
+) => {
+  const apiurl = `${BASE_URL}${url}`;
+
+  const options: RequestInit = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers, // Merge user-defined headers with default headers
+    },
+  };
+
+  if (body) {
+    options.body = JSON.stringify(body);
+  }
 
   try {
-    const response = await fetch(apiurl);
+    const response = await fetch(apiurl, options);
     const data = await response.json();
 
     if (!response.ok) {
@@ -23,6 +40,7 @@ export const getRequest = async (url: string) => {
     return { error: true, message: "Network error" };
   }
 };
+
 
 export const postRequest = async (url: string, body: any): Promise<any> => {
   const apiurl = `${BASE_URL}${url}`;

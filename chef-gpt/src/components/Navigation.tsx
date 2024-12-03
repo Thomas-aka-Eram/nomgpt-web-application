@@ -1,23 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../css/navigation.css";
 import { useAuth } from "../context/UserContext";
 import { useTheme } from "../context/themecontext"; // Import the custom hook
-
-interface User {
-  name: string;
-}
+import ProfileNavi from "./profilenavi"; // Import the ProfileNavi component
 
 function Navigation() {
-  const [user, setUser] = React.useState<User>({ name: "Thomas Eram" });
   const { theme, toggleTheme } = useTheme(); // Access theme context
-  const { isAuthenticated, openModal, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
+
+  // State to control profile navigation visibility
+  const [showProfile, setShowProfile] = useState(false);
+
+  // Toggle profile navigation visibility
+  const toggleProfile = () => {
+    setShowProfile(!showProfile);
+  };
 
   React.useEffect(() => {
     // Simulate fetching user data if needed
-    // setUser({ name: "Test User" });
-  }, []);
+    fetchUserData();
+  }, [isAuthenticated]);
+
+  const fetchUserData = async () => {
+    const token = localStorage.getItem("authToken");
+    const response = await fetch("/userdata", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    return data;
+  };
+
+  // Use effect to add/remove no-scroll class when show changes
+  useEffect(() => {
+    if (showProfile) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+
+    // Clean up by removing the class when the component unmounts
+    return () => document.body.classList.remove("no-scroll");
+  }, [showProfile]);
 
   return (
     <>
@@ -45,16 +73,6 @@ function Navigation() {
               <h2>Generate</h2>
             </Link>
           </div>
-          {isAuthenticated && (
-            <div className="favourite">
-              <Link
-                className="no-link-style navi-btn"
-                to={"../nomgpt/favourite"}
-              >
-                <h2>Favourite</h2>
-              </Link>
-            </div>
-          )}
 
           <div className="category navi-btn">
             <h2>Categories</h2>
@@ -75,20 +93,36 @@ function Navigation() {
           </div>
           <div className="profile">
             {isAuthenticated ? (
-              <button onClick={logout}>Logout</button>
+              <button className="profile-button" onClick={toggleProfile}>
+                <img
+                  src={
+                    user?.image?.startsWith("/upload")
+                      ? `http://localhost:5000${user.image}`
+                      : user?.image.split("=")[0]
+                  }
+                  alt="User Profile"
+                  className="pfimg"
+                />
+              </button>
             ) : (
               <div className="noAuth">
-                <button className="signin" onClick={openModal}>
-                  Sign In
+                <button className="login" onClick={() => navigate("/login")}>
+                  Log In
                 </button>
-                <button className="signup" onClick={openModal}>
-                  Sign Up
+                <button
+                  className="Signup"
+                  onClick={() => navigate("/register")}
+                >
+                  Sign Up🧑‍🍳
                 </button>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Profile Navigation - This component will slide in */}
+      <ProfileNavi show={showProfile} onClose={toggleProfile} />
     </>
   );
 }

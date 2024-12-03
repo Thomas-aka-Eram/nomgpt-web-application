@@ -1,8 +1,10 @@
 import Navigation from "../components/Navigation";
 import Layout from "../components/Layout";
 import "../css/chefpage.css";
+import { useAuth } from "../context/UserContext";
 
 function ChefPage() {
+  const { user } = useAuth();
   return (
     <Layout>
       <div className="chefmaincontainer">

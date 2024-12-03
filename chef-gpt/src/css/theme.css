@@ -27,6 +27,7 @@
   --selected-blur-color: rgba(160, 220, 200, 0.8); /* Aqua Blur */
   --blur-blue: rgba(170, 200, 230, 0.4); /* Cool Sky Blue */
 
+  --blur-bg-color: rgba(68, 68, 68, 0.299);
   /* Input Background Colors */
   --input-bg-color: #f8f8f8; /* Light background for input fields */
   --input-bg-focus-color: #e0f7fa; /* Light focus background for input */
@@ -59,6 +60,7 @@
   --selected-blur-color: rgba(70, 100, 90, 0.8); /* Deep Aqua Blur */
   --blur-blue: rgba(60, 90, 120, 0.4); /* Deep Blue */
 
+  --blur-bg-color: #44444457;
   /* Input Background Colors for Dark Mode */
   --input-bg-color: #444; /* Dark background for input fields */
   --input-bg-focus-color: #555; /* Darker background for focus */
@@ -75,6 +77,33 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: bottom;
+}
+
+/* Style the scrollbar itself */
+body::-webkit-scrollbar {
+  width: 8px; /* width of the scrollbar */
+  height: 8px; /* height of horizontal scrollbar */
+}
+
+/* Style the track (background of the scrollbar) */
+body::-webkit-scrollbar-track {
+  background: #f1f1f1; /* light gray background */
+  border-radius: 10px;
+}
+
+/* Style the thumb (the draggable part of the scrollbar) */
+body::-webkit-scrollbar-thumb {
+  background: #8888886a; /* dark gray thumb */
+  border-radius: 10px;
+}
+
+/* On hover, change the thumb color */
+body::-webkit-scrollbar-thumb:hover {
+  background: #555555; /* darker gray when hovering */
+}
+
+body.no-scroll {
+  overflow: hidden;
 }
 
 .no-link-logo {

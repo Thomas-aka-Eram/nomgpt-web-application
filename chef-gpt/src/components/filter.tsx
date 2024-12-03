@@ -58,7 +58,6 @@ const Filter: React.FC<FilterProps> = ({ setFilters }) => {
     }
   };
 
-  // Handle checkbox change for dropdown filters
   const handleCheckboxChange = <T extends keyof LocalFilters>(
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -79,13 +78,6 @@ const Filter: React.FC<FilterProps> = ({ setFilters }) => {
     }));
   };
 
-  // Toggle dropdown visibility
-  // const toggleDropdown = (key: string) => {
-  //   setDropdownState((prev) => ({
-  //     ...prev,
-  //     [key]: !prev[key],
-  //   }));
-  // };
   const toggleDropdown = (key: string) => {
     setOpenDropdown((prev) => (prev === key ? null : key));
   };

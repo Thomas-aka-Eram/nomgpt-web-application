@@ -14,8 +14,8 @@ function App() {
     <ThemeProvider>
       <UserProvider>
         <Routes>
-          <Route path="/nomgpt/signup" element={<SignupModal />} />
-          <Route path="/nomgpt/login" element={<LoginModal />} />
+          <Route path="/register" element={<SignupModal />} />
+          <Route path="/login" element={<LoginModal />} />
           <Route path="/nomgpt/discover" element={<Discover />} />
           <Route path="/nomgpt/generate" element={<Generate />} />
           <Route path="/nomgpt/favourite" element={<Favourite />} />

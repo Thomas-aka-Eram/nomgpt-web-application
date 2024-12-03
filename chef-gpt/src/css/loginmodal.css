@@ -103,6 +103,11 @@
 /* Google Sign-In Button */
 .google-login {
   margin: 10px 0;
+  width: 100%;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Register Link */
@@ -114,4 +119,23 @@
 .register-link a {
   color: var(--main-color);
   text-decoration: none;
+}
+
+.back {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+
+  button {
+    font-size: 1rem;
+    padding: 10px;
+    border: none;
+    color: var(--text-color);
+    background: transparent;
+
+    &:hover {
+      background-color: var(--input-bg-color);
+    }
+  }
 }

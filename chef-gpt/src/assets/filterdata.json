@@ -1,7 +1,7 @@
 {
     "filter-cuisine": ["italian", "mexican", "chinese", "american", "indian"],
-    "filter-mealType": ["breakfast", "lunch", "dinner"],
-    "filter-dishType":["Soup"],
+    "filter-mealType": ["breakfast", "lunch", "dinner", "TeaTime"],
+    "filter-dishType":["Soup", "Biscuits and cookies", "Bread", "Cereals", "Condiments and sauce", "Desserts", "Drinks", "Main Course", "Pancake", "Preps", "Preserve", "Salad", "Sandwiches", "Side Dish", "Starter", "Sweets"],
     "filter-diet": ["low-carb", "high-protein", "balanced"],
     "filter-health": ["gluten-free", "vegan", "paleo"]
   }

@@ -1,26 +1,35 @@
-import React, { createContext, useState, useContext, ReactNode } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  ReactNode,
+} from "react";
+import { jwtDecode } from "jwt-decode";
+import { getRequest } from "../utils/services";
 
 interface UserContextType {
-  user: { username: string; email: string } | null;
+  token: string | null;
   isAuthenticated: boolean;
-  login: (userData: { username: string; email: string }) => void;
+  user: {
+    userId: string;
+    userName: string;
+    email: string;
+    image: string;
+  } | null;
+  login: (token: string) => void;
   logout: () => void;
-  showModal: boolean;
-  openModal: () => void;
-  closeModal: () => void;
 }
 
 const defaultUserContext: UserContextType = {
-  user: null,
+  token: null,
   isAuthenticated: false,
+  user: null,
   login: () => {},
   logout: () => {},
-  showModal: false,
-  openModal: () => {},
-  closeModal: () => {},
 };
 
-interface MyComponentProps {
+interface UserProviderProps {
   children: ReactNode;
 }
 
@@ -30,32 +39,69 @@ export const UserContext = createContext<UserContextType | undefined>(
 
 export const useUserContext = () => useContext(UserContext);
 
-export const UserProvider: React.FC<MyComponentProps> = ({ children }) => {
-  const [user, setUser] = useState<{ username: string; email: string } | null>(
-    null
+export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("userToken")
   );
-  const [showModal, setShowModal] = useState(false);
+  const [user, setUser] = useState<{
+    userId: string;
+    userName: string;
+    email: string;
+    image: string;
+  } | null>(null);
 
-  const login = (userData: { username: string; email: string }) => {
-    setUser(userData);
-    setShowModal(false); // Close modal after login
+  const getUserData = async (token: string) => {
+    const response = await getRequest("/userdata", "GET", {
+      Authorization: `Bearer ${token}`, // Pass the token in the headers
+    });
+
+    if (response.error) {
+      console.error("Error fetching user data:", response.message);
+      return null;
+    }
+
+    return response;
   };
 
-  const logout = () => setUser(null);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (token) {
+        const userData = await getUserData(token);
+        if (userData) {
+          setUser({
+            userId: userData._id,
+            userName: userData.username,
+            email: userData.email,
+            image: userData.image,
+          });
+        }
+      }
+    };
 
-  const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+    fetchUserData();
+  }, [token]);
+
+  // Login function to store token in localStorage and context
+  const login = (newToken: string) => {
+    localStorage.setItem("userToken", newToken);
+    setToken(newToken);
+  };
+
+  // Logout function to clear token from localStorage and context
+  const logout = () => {
+    localStorage.removeItem("userToken");
+    setToken(null);
+    setUser(null);
+  };
 
   return (
     <UserContext.Provider
       value={{
+        token,
+        isAuthenticated: !!token, // If token exists, user is authenticated
         user,
-        isAuthenticated: !!user,
         login,
         logout,
-        showModal,
-        openModal,
-        closeModal,
       }}
     >
       {children}
