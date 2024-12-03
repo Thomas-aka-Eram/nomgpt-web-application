@@ -1,6 +1,6 @@
 # Nom GPT
 
-Nom GPT is a hands-on project I am working on to gain practical experience with real-world applications. The project focuses on building a recipe recommendation system using AI and web APIs. It provides an opportunity for me to strengthen my understanding of AI generation, API integration, and UI styling.
+Nom GPT is a hands-on project I am working on to gain practical experience with real-world applications. The project focuses on building a recipe recommendation system using AI and web APIs. It provides an opportunity for me to strengthen my understanding of AI generation, API integration, and UI styling. I reference the User Interface and application idea from ChefGPT.
 
 ## Project Overview
 
