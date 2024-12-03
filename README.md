@@ -61,3 +61,7 @@ This project is developed as a **personal learning experience**. It is **not a c
 (Include screenshots of your app's key features or user interface, if available.)
 
 ---
+
+## 📜 License
+This project is licensed under the [MIT License](LICENSE).
+
