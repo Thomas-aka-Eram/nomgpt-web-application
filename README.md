@@ -28,10 +28,3 @@ This project serves as a learning experience to:
 - **Filter Options**: Filter recipes by diet, health considerations, cuisine, and more.
 - **User Interface**: Clean and simple UI built using React and styled with CSS for a pleasant user experience.
 
-## Installation
-
-To run **Nom GPT** locally, follow these steps:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/nom-gpt.git
