@@ -1,30 +1,63 @@
-# Nom GPT
+# Nom GPT 🍽️  
 
-Nom GPT is a hands-on project I am working on to gain practical experience with real-world applications. The project focuses on building a recipe recommendation system using AI and web APIs. It provides an opportunity for me to strengthen my understanding of AI generation, API integration, and UI styling. I reference the User Interface and application idea from ChefGPT.
+Nom GPT is a hands-on project developed to gain practical experience with real-world applications. The project focuses on building a recipe recommendation system using AI and web APIs. It leverages **Chef Transformer T5** for AI-generated responses and the **Edamam API** for recipe data. Additionally, it emphasizes enhancing skills in **UI styling** using CSS and modern frontend techniques.
 
-## Project Overview
+---
 
-The main goal of **Nom GPT** is to generate personalized cooking instructions based on ingredients provided by the user. This project integrates the **Chef Transformer T5** model for AI-based recipe generation and uses the **Edamam Web API** to fetch recipe data. 
+## 🚀 Features  
+- **AI-Powered Recipe Recommendations**  
+  Generate cooking instructions and recipe ideas using Chef Transformer T5.  
 
-This project is a great exercise to learn about the end-to-end process of building a web application with complex functionalities, including interacting with APIs, working with machine learning models, and applying UI/UX principles.
+- **API Integration**  
+  Seamlessly fetch recipe data from Edamam's extensive recipe database.
 
-## Learning Process
+- **Custom Filters**  
+  Filter recipes based on ingredients, dietary preferences, and more.  
 
-This project serves as a learning experience to:
-- Work with the **Chef Transformer T5** model for AI-based content generation, improving my understanding of machine learning models and how they can be fine-tuned for specific tasks.
-- Integrate external data through the **Edamam Web API**, learning how to handle API responses, filter data, and use it in a real-time application.
-- Utilize **CSS** to build an intuitive and attractive user interface. Through this, I aim to deepen my knowledge of UI/UX design and front-end development.
+- **Interactive User Interface**  
+  A styled, user-friendly experience designed to refine CSS and frontend skills.
 
-## Technologies Used
+---
 
-- **AI Model**: Chef Transformer T5 (for recipe generation)
-- **API**: Edamam Web API (for fetching recipe data)
-- **Frontend**: React, CSS
-- **Backend**: Node.js (Express)
+## 📖 Purpose  
+This project is a learning endeavor aimed at improving:  
+- AI implementation skills through practical model usage.  
+- API integration in modern web development.  
+- User interface and experience design with CSS.  
+- Problem-solving and debugging within real-world constraints.
 
-## Features
+---
 
-- **Recipe Generation**: Generate personalized recipes based on the ingredients provided by the user.
-- **Filter Options**: Filter recipes by diet, health considerations, cuisine, and more.
-- **User Interface**: Clean and simple UI built using React and styled with CSS for a pleasant user experience.
+## 🧑‍🍳 Inspiration and References  
+The idea and interface of **Nom GPT** are inspired by [ChefGPT](https://chefgpt.xyz/). This project was developed solely for **educational purposes** to understand the intricacies of AI-powered applications.  
 
+Nom GPT is not affiliated with or endorsed by ChefGPT. All code and implementations are original and were created as part of a self-directed learning experience.  
+
+---
+
+## 🛠️ Tech Stack  
+- **Frontend**: React.js, CSS  
+- **Backend**: Node.js, Express  
+- **AI Model**: Chef Transformer T5 (fine-tuned for recipe recommendations)  
+- **API**: Edamam Recipe API  
+
+---
+
+## 🧩 Learning Journey  
+This project provided opportunities to:  
+- Implement AI models into a real-world application.  
+- Work with external APIs like Edamam for seamless data retrieval.  
+- Use React to create dynamic, responsive user interfaces.  
+- Explore practical applications of CSS for interactive styling.  
+
+---
+
+## 📝 Disclaimer  
+This project is developed as a **personal learning experience**. It is **not a commercial product** and does not replicate the exact functionality of ChefGPT. Any similarity in design or features is purely for learning purposes.  
+
+---
+
+## 📸 Screenshots  
+(Include screenshots of your app's key features or user interface, if available.)
+
+---
