@@ -26,7 +26,6 @@ const registerUser = async (req, res) => {
 
     try {
         const { username, image, email, password } = req.body;
-        console.log(req.body, "SOMETHING")
 
         // Input validation
         if (!username || !email || !password) {

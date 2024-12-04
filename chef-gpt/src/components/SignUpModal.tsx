@@ -13,6 +13,7 @@ const SignupModal = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
   const handleCallbackResponse = async (response: any) => {
     try {
@@ -33,8 +34,7 @@ const SignupModal = () => {
   useEffect(() => {
     if (window.google) {
       window.google.accounts.id.initialize({
-        client_id:
-          "987969491643-hjg3qumc7lhl39bkufiads8mhvtohm9b.apps.googleusercontent.com",
+        client_id: googleClientId,
         callback: handleCallbackResponse,
       });
       window.google.accounts.id.renderButton(
@@ -65,9 +65,9 @@ const SignupModal = () => {
         email,
         password,
       });
-
       // Log in the user in context
-      login(response.user);
+      login(response.token);
+      navigate("/");
     } catch (err) {
       console.error("Registration Error:", err);
       setError("Registration failed. Please try again.");

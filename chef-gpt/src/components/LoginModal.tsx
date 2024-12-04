@@ -12,6 +12,7 @@ const LoginModal = () => {
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
   const handleCallbackResponse = async (response: any) => {
     try {
@@ -32,8 +33,7 @@ const LoginModal = () => {
   useEffect(() => {
     if (window.google) {
       window.google.accounts.id.initialize({
-        client_id:
-          "987969491643-hjg3qumc7lhl39bkufiads8mhvtohm9b.apps.googleusercontent.com",
+        client_id: googleClientId,
         callback: handleCallbackResponse,
       });
       window.google.accounts.id.renderButton(
@@ -53,18 +53,9 @@ const LoginModal = () => {
     }
 
     try {
-      const response = await fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        login(data.token);
-      } else {
-        setError(data.message || "Invalid email or password.");
-      }
+      const loginResponse = await postRequest("/login", { email, password });
+      login(loginResponse.token);
+      navigate("/");
     } catch (error) {
       setError("Something went wrong. Please try again later.");
     }

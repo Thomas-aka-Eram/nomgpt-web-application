@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema(
         email: { type: String, required: true, unique: true },
         username: { type: String, required: true },
         password: { type: String, required: function () { return !this.googleId; } },
-        image: { type: String, default: '/upload/defaultpf.png' },
+        image: { type: String, default: '/upload/defaultpf.jpg' },
         createdAt: { type: Date, default: Date.now },
     },
     {

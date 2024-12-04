@@ -38,6 +38,7 @@ function ChefPage() {
             <h2>Your Personal Chef, Trainer, Health Care Advisor</h2>
             <p>Cooking Made Smarter with AI.</p>
           </div>
+          <span>{user?.image}</span>
         </div>
       </div>
     </Layout>
